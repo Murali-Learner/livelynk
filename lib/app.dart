@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapp_chat_clone/services/hive_service.dart';
-import 'package:whatsapp_chat_clone/views/home_page.dart';
-import 'package:whatsapp_chat_clone/views/login_view.dart';
+import 'package:livelynk/services/hive_service.dart';
+import 'package:livelynk/views/home_page.dart';
+import 'package:livelynk/views/login_view.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

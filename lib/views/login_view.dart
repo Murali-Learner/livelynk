@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:whatsapp_chat_clone/providers/auth_provider.dart';
-import 'package:whatsapp_chat_clone/views/home_page.dart';
-import 'package:whatsapp_chat_clone/views/register_view.dart';
-import 'package:whatsapp_chat_clone/views/utils/extensions/context_extensions.dart';
-import 'package:whatsapp_chat_clone/views/utils/extensions/spacer_extension.dart';
-import 'package:whatsapp_chat_clone/views/utils/toast.dart';
+import 'package:livelynk/providers/auth_provider.dart';
+import 'package:livelynk/views/home_page.dart';
+import 'package:livelynk/views/register_view.dart';
+import 'package:livelynk/views/utils/extensions/context_extensions.dart';
+import 'package:livelynk/views/utils/extensions/spacer_extension.dart';
+import 'package:livelynk/views/utils/toast.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();

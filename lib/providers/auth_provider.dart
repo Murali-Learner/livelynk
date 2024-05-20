@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:whatsapp_chat_clone/models/user_model.dart';
-import 'package:whatsapp_chat_clone/services/hive_service.dart';
-import 'package:whatsapp_chat_clone/views/utils/toast.dart';
+import 'package:livelynk/models/user_model.dart';
+import 'package:livelynk/services/hive_service.dart';
+import 'package:livelynk/views/utils/toast.dart';
 import '../services/http_service.dart';
 
 class AuthProvider with ChangeNotifier {

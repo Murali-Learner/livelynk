@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:whatsapp_chat_clone/models/chat_messsage.dart';
-import 'package:whatsapp_chat_clone/models/room_model.dart';
-import 'package:whatsapp_chat_clone/models/user_model.dart';
+import 'package:livelynk/models/chat_messsage.dart';
+import 'package:livelynk/models/room_model.dart';
+import 'package:livelynk/models/user_model.dart';
 
 class HiveService {
   static final HiveService _hiveService = HiveService._internal();

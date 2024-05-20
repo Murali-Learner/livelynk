@@ -2,14 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:whatsapp_chat_clone/providers/auth_provider.dart';
-import 'package:whatsapp_chat_clone/services/hive_service.dart';
-import 'package:whatsapp_chat_clone/views/login_view.dart';
-import 'package:whatsapp_chat_clone/views/utils/extensions/context_extensions.dart';
-import 'package:whatsapp_chat_clone/views/utils/extensions/naming_extension.dart';
-import 'package:whatsapp_chat_clone/views/widgets/my_chats_tab.dart';
-import 'package:whatsapp_chat_clone/views/widgets/my_contacts_tab.dart';
-import 'package:whatsapp_chat_clone/views/widgets/total_contacts_tab.dart';
+import 'package:livelynk/providers/auth_provider.dart';
+import 'package:livelynk/services/hive_service.dart';
+import 'package:livelynk/views/login_view.dart';
+import 'package:livelynk/views/utils/extensions/context_extensions.dart';
+import 'package:livelynk/views/utils/extensions/naming_extension.dart';
+import 'package:livelynk/views/widgets/my_chats_tab.dart';
+import 'package:livelynk/views/widgets/my_contacts_tab.dart';
+import 'package:livelynk/views/widgets/total_contacts_tab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:whatsapp_chat_clone/models/user_model.dart';
-import 'package:whatsapp_chat_clone/providers/auth_provider.dart';
-import 'package:whatsapp_chat_clone/views/chat_view.dart';
-import 'package:whatsapp_chat_clone/views/utils/extensions/context_extensions.dart';
-import 'package:whatsapp_chat_clone/views/utils/extensions/naming_extension.dart';
+import 'package:livelynk/models/user_model.dart';
+import 'package:livelynk/providers/auth_provider.dart';
+import 'package:livelynk/views/chat_view.dart';
+import 'package:livelynk/views/utils/extensions/context_extensions.dart';
+import 'package:livelynk/views/utils/extensions/naming_extension.dart';
 
 class UserTile extends StatelessWidget {
   final User contact;

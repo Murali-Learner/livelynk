@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:whatsapp_chat_clone/providers/auth_provider.dart';
-import 'package:whatsapp_chat_clone/views/widgets/user_tile.dart';
+import 'package:livelynk/providers/auth_provider.dart';
+import 'package:livelynk/views/widgets/user_tile.dart';
 
 class MyContactsTab extends StatefulWidget {
   const MyContactsTab({super.key});

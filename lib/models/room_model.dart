@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:whatsapp_chat_clone/models/chat_messsage.dart';
+import 'package:livelynk/models/chat_messsage.dart';
 part 'room_model.g.dart';
 
 @HiveType(typeId: 2)

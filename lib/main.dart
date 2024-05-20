@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:whatsapp_chat_clone/app.dart';
-import 'package:whatsapp_chat_clone/providers/auth_provider.dart';
-import 'package:whatsapp_chat_clone/services/http_service.dart';
-import 'package:whatsapp_chat_clone/services/hive_service.dart';
+import 'package:livelynk/app.dart';
+import 'package:livelynk/providers/auth_provider.dart';
+import 'package:livelynk/services/http_service.dart';
+import 'package:livelynk/services/hive_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

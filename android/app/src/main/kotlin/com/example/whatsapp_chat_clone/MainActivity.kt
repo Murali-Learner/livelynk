@@ -1,4 +1,4 @@
-package com.example.whatsapp_chat_clone
+package com.example.livelynk
 
 import io.flutter.embedding.android.FlutterActivity
 

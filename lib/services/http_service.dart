@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:whatsapp_chat_clone/models/user_model.dart';
+import 'package:livelynk/models/user_model.dart';
 
 class HttpService {
   static const String baseUrl = 'http://192.168.24.159:3000';

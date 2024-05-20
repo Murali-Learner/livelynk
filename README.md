@@ -1,4 +1,4 @@
-# whatsapp_chat_clone
+# livelynk
 
 A new Flutter project.
 
