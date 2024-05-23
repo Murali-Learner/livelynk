@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:livelynk/providers/chat_provider.dart';
+import 'package:livelynk/providers/home_provider.dart';
+import 'package:livelynk/services/socket_service.dart';
 import 'package:provider/provider.dart';
 import 'package:livelynk/app.dart';
 import 'package:livelynk/providers/auth_provider.dart';
@@ -19,10 +22,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(
-          create: (context) => AuthProvider(
-            httpService: HttpService(),
-          ),
+          create: (context) => AuthProvider(httpService: HttpService()),
         ),
+        ChangeNotifierProvider<ChatProvider>(
+          create: (_) => ChatProvider(SocketService('ws://localhost:3000')),
+        ),
+        ChangeNotifierProvider<HomeProvider>(create: (_) => HomeProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
