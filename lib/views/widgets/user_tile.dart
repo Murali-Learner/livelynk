@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:livelynk/models/user_model.dart';
 import 'package:livelynk/providers/auth_provider.dart';
-import 'package:livelynk/views/chat_view.dart';
+import 'package:livelynk/views/chat_page.dart';
 import 'package:livelynk/views/utils/extensions/context_extensions.dart';
 import 'package:livelynk/views/utils/extensions/naming_extension.dart';
 
@@ -22,7 +22,7 @@ class UserTile extends StatelessWidget {
       elevation: 4,
       child: ListTile(
         onTap: () {
-          if (isMyuser) context.push(navigateTo: ChatScreen(contact: contact));
+          if (isMyuser) context.push(navigateTo: ChatPage(contact: contact));
         },
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
