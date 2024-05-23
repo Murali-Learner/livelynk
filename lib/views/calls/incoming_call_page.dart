@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:livelynk/views/utils/extensions/context_extensions.dart';
-import 'package:livelynk/views/utils/extensions/naming_extension.dart';
+import 'package:livelynk/utils/extensions/context_extensions.dart';
+import 'package:livelynk/utils/extensions/naming_extension.dart';
 
 class IncomingCallPage extends StatelessWidget {
   final String callerName;

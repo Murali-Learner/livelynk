@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:livelynk/providers/auth_provider.dart';
 
-class MyChatsTab extends StatefulWidget {
-  const MyChatsTab({super.key});
+class MyChatsPage extends StatefulWidget {
+  const MyChatsPage({super.key});
 
   @override
-  MyChatsTabState createState() => MyChatsTabState();
+  MyChatsPageState createState() => MyChatsPageState();
 }
 
-class MyChatsTabState extends State<MyChatsTab> {
+class MyChatsPageState extends State<MyChatsPage> {
   @override
   void initState() {
     super.initState();

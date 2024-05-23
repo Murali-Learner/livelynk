@@ -34,7 +34,7 @@ class HiveService {
     Hive.registerAdapter(RoomAdapter());
   }
 
-  static Future<void> saveUsername(User user) async {
+  static Future<void> saveUser(User user) async {
     await init();
     currentUser = user;
     await _box!.put('username', user);

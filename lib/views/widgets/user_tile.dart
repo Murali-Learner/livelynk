@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:livelynk/utils/enums/button_status_enum.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:livelynk/models/user_model.dart';
 import 'package:livelynk/providers/auth_provider.dart';
-import 'package:livelynk/views/chat_page.dart';
-import 'package:livelynk/views/utils/extensions/context_extensions.dart';
-import 'package:livelynk/views/utils/extensions/naming_extension.dart';
+import 'package:livelynk/utils/extensions/naming_extension.dart';
 
 class UserTile extends StatelessWidget {
   final User contact;
-  final bool isMyuser;
+  final ButtonStatus status;
 
-  const UserTile({super.key, required this.contact, this.isMyuser = false});
+  const UserTile({super.key, required this.contact, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,7 @@ class UserTile extends StatelessWidget {
       ),
       elevation: 4,
       child: ListTile(
-        onTap: () {
-          if (isMyuser) context.push(navigateTo: ChatPage(contact: contact));
-        },
+        onTap: () {},
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         leading: CircleAvatar(
@@ -42,22 +40,38 @@ class UserTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (isMyuser)
+            if (status == ButtonStatus.ACCEPTED)
               IconButton(
                 padding: EdgeInsets.zero,
                 icon: const Icon(Icons.delete),
                 onPressed: () async {
                   await Provider.of<AuthProvider>(context, listen: false)
-                      .deleteContact(contact.userId!);
+                      .deleteContact(contact.contactId!);
                 },
               ),
-            if (!isMyuser)
+            if (status == ButtonStatus.REQUESTED)
+              Tooltip(
+                message: "Decline Request",
+                child: InkWell(
+                  onTap: () async {
+                    await Provider.of<AuthProvider>(context, listen: false)
+                        .deleteContact(contact.contactId!);
+                  },
+                  child: SvgPicture.asset(
+                    "assets/icons/person_remove.svg",
+                    height: 25,
+                    width: 25,
+                  ),
+                ),
+              ),
+            if (status == ButtonStatus.INVITED)
               IconButton(
                 padding: EdgeInsets.zero,
-                icon: const Icon(Icons.add_call),
+                tooltip: "Accept Request",
+                icon: const Icon(Icons.check),
                 onPressed: () async {
                   await Provider.of<AuthProvider>(context, listen: false)
-                      .addContact(contact.userId!);
+                      .acceptContactRequest(contact.contactId!);
                 },
               ),
           ],

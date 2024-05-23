@@ -16,11 +16,14 @@ class User {
   final List<Room> rooms;
   @HiveField(5)
   final String? roomId;
+  @HiveField(6)
+  final String? contactId;
 
   User({
     required this.username,
     this.userId,
     this.roomId,
+    this.contactId,
     this.email,
     this.contacts = const [],
     this.rooms = const [],
@@ -29,10 +32,11 @@ class User {
   // From JSON
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['userId'],
-      roomId: json['roomId'],
-      username: json['username'] ?? '',
-      email: json['email'],
+      userId: json['userId'].toString(),
+      roomId: json['roomId'].toString(),
+      contactId: json['contactId'].toString(),
+      username: json['userName'] ?? json['username'] ?? '',
+      email: json['email'].toString(),
       contacts: (json['contacts'] as List<dynamic>?)
               ?.map((contact) => User.fromJson(contact))
               .toList() ??
@@ -49,6 +53,7 @@ class User {
     return {
       'userId': userId,
       'username': username,
+      'contactId': contactId,
       'roomId': roomId,
       'email': email,
       'contacts': contacts.map((contact) => contact.toJson()).toList(),
@@ -62,6 +67,7 @@ class User {
     String? username,
     String? email,
     String? roomId,
+    String? contactId,
     List<User>? contacts,
     List<Room>? rooms,
   }) {
@@ -70,6 +76,7 @@ class User {
       username: username ?? this.username,
       email: email ?? this.email,
       roomId: roomId ?? this.roomId,
+      contactId: contactId ?? this.contactId,
       contacts: contacts ?? this.contacts,
       rooms: rooms ?? this.rooms,
     );
