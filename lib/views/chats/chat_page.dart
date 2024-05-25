@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../providers/chat_provider.dart';
 
 class ChatPage extends StatelessWidget {
-  final User contact;
+  final Contact contact;
 
   const ChatPage({super.key, required this.contact});
 

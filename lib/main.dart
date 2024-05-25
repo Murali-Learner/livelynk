@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:livelynk/providers/chat_provider.dart';
+import 'package:livelynk/providers/contact_provider.dart';
 import 'package:livelynk/providers/home_provider.dart';
-import 'package:livelynk/services/socket_service.dart';
 import 'package:provider/provider.dart';
 import 'package:livelynk/app.dart';
 import 'package:livelynk/providers/auth_provider.dart';
-import 'package:livelynk/services/http_service.dart';
 import 'package:livelynk/services/hive_service.dart';
 
 Future<void> main() async {
@@ -22,12 +20,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(
-          create: (context) => AuthProvider(httpService: HttpService()),
+          create: (context) => AuthProvider(),
         ),
-        ChangeNotifierProvider<ChatProvider>(
-          create: (_) => ChatProvider(SocketService('ws://localhost:3000')),
+        ChangeNotifierProvider<HomeProvider>(
+          create: (context) => HomeProvider(),
         ),
-        ChangeNotifierProvider<HomeProvider>(create: (_) => HomeProvider()),
+        ChangeNotifierProvider<ContactProvider>(
+          create: (context) => ContactProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -37,54 +37,6 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const App(),
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }

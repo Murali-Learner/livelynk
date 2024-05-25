@@ -68,13 +68,12 @@ class RegisterPage extends StatelessWidget {
                       controller: _passwordController,
                       obscureText: provider.obscureText,
                       validator: (value) {
-                        if (value!.isEmpty || value.length <= 7) {
+                        if (value!.isEmpty) {
                           return 'Password must be at least 8 characters long';
                         } else {
                           return null;
                         }
                       },
-                      maxLength: 8,
                       decoration: InputDecoration(
                         labelText: 'Password',
                         suffixIcon: IconButton(

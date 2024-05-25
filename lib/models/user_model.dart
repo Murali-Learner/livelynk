@@ -3,7 +3,7 @@ import 'package:livelynk/models/room_model.dart';
 part 'user_model.g.dart';
 
 @HiveType(typeId: 0)
-class User {
+class Contact {
   @HiveField(0)
   final String? userId;
   @HiveField(1)
@@ -11,7 +11,7 @@ class User {
   @HiveField(2)
   final String? email;
   @HiveField(3)
-  final List<User> contacts;
+  final List<Contact> contacts;
   @HiveField(4)
   final List<Room> rooms;
   @HiveField(5)
@@ -19,7 +19,7 @@ class User {
   @HiveField(6)
   final String? contactId;
 
-  User({
+  Contact({
     required this.username,
     this.userId,
     this.roomId,
@@ -30,15 +30,15 @@ class User {
   });
 
   // From JSON
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory Contact.fromJson(Map<String, dynamic> json) {
+    return Contact(
       userId: json['userId'].toString(),
       roomId: json['roomId'].toString(),
       contactId: json['contactId'].toString(),
       username: json['userName'] ?? json['username'] ?? '',
       email: json['email'].toString(),
       contacts: (json['contacts'] as List<dynamic>?)
-              ?.map((contact) => User.fromJson(contact))
+              ?.map((contact) => Contact.fromJson(contact))
               .toList() ??
           [],
       rooms: (json['rooms'] as List<dynamic>?)
@@ -62,16 +62,16 @@ class User {
   }
 
   // Copy with method
-  User copyWith({
+  Contact copyWith({
     String? userId,
     String? username,
     String? email,
     String? roomId,
     String? contactId,
-    List<User>? contacts,
+    List<Contact>? contacts,
     List<Room>? rooms,
   }) {
-    return User(
+    return Contact(
       userId: userId ?? this.userId,
       username: username ?? this.username,
       email: email ?? this.email,

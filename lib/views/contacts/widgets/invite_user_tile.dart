@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livelynk/models/user_model.dart';
-import 'package:livelynk/providers/auth_provider.dart';
+import 'package:livelynk/providers/contact_provider.dart';
 import 'package:provider/provider.dart';
 
 class InviteUserTile extends StatelessWidget {
@@ -9,11 +9,11 @@ class InviteUserTile extends StatelessWidget {
     required this.user,
   });
 
-  final User user;
+  final Contact user;
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AuthProvider>(context);
+    final provider = Provider.of<ContactProvider>(context);
     return ListTile(
       leading: CircleAvatar(
         child: Text(user.username[0].toUpperCase()),

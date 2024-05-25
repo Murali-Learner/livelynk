@@ -6,29 +6,29 @@ part of 'user_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserAdapter extends TypeAdapter<User> {
+class UserAdapter extends TypeAdapter<Contact> {
   @override
   final int typeId = 0;
 
   @override
-  User read(BinaryReader reader) {
+  Contact read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return User(
+    return Contact(
       username: fields[1] as String,
       userId: fields[0] as String?,
       roomId: fields[5] as String?,
       contactId: fields[6] as String?,
       email: fields[2] as String?,
-      contacts: (fields[3] as List).cast<User>(),
+      contacts: (fields[3] as List).cast<Contact>(),
       rooms: (fields[4] as List).cast<Room>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, User obj) {
+  void write(BinaryWriter writer, Contact obj) {
     writer
       ..writeByte(7)
       ..writeByte(0)

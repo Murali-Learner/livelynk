@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:livelynk/models/user_model.dart';
+import 'package:livelynk/providers/contact_provider.dart';
 import 'package:livelynk/utils/enums/button_status_enum.dart';
 import 'package:livelynk/utils/enums/contact_status_enum.dart';
 import 'package:livelynk/views/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:livelynk/providers/auth_provider.dart';
 import 'package:livelynk/views/widgets/user_tile.dart';
 
 class ContactsTab extends StatefulWidget {
@@ -30,16 +30,16 @@ class _ContactsTabState extends State<ContactsTab> {
   init() async {
     if (widget.status == ContactStatus.ACCEPTED) {
       await Future.delayed(Duration.zero).whenComplete(() =>
-          Provider.of<AuthProvider>(context, listen: false)
+          Provider.of<ContactProvider>(context, listen: false)
               .fetchUsers(ContactStatus.ACCEPTED, false));
     } else if (widget.isSendContact) {
       await Future.delayed(Duration.zero).whenComplete(() {
-        Provider.of<AuthProvider>(context, listen: false)
+        Provider.of<ContactProvider>(context, listen: false)
             .fetchUsers(ContactStatus.INVITED, true);
       });
     } else {
       await Future.delayed(Duration.zero).whenComplete(() {
-        Provider.of<AuthProvider>(context, listen: false)
+        Provider.of<ContactProvider>(context, listen: false)
             .fetchUsers(ContactStatus.INVITED, false);
       });
     }
@@ -47,9 +47,9 @@ class _ContactsTabState extends State<ContactsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(
+    return Consumer<ContactProvider>(
       builder: (context, provider, _) {
-        final List<User> userList = widget.status == ContactStatus.ACCEPTED
+        final List<Contact> userList = widget.status == ContactStatus.ACCEPTED
             ? provider.acceptedUsers
             : widget.isSendContact
                 ? provider.invitedUsers

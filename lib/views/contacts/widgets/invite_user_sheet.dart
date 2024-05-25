@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:livelynk/providers/auth_provider.dart';
+import 'package:livelynk/providers/contact_provider.dart';
 import 'package:livelynk/views/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:livelynk/utils/extensions/spacer_extension.dart';
@@ -23,7 +23,7 @@ class InviteUserSheetState extends State<InviteUserSheet> {
   }
 
   init() async {
-    await Provider.of<AuthProvider>(context, listen: false).fetchAllUsers();
+    await Provider.of<ContactProvider>(context, listen: false).fetchAllUsers();
   }
 
   @override
@@ -34,13 +34,14 @@ class InviteUserSheetState extends State<InviteUserSheet> {
   }
 
   void _onSearchChanged() {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    authProvider.filterUsers(searchController.text);
+    final contactProvider =
+        Provider.of<ContactProvider>(context, listen: false);
+    contactProvider.filterUsers(searchController.text);
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<AuthProvider>();
+    final provider = context.watch<ContactProvider>();
     return provider.isLoading
         ? const LoadingWidget()
         : FractionallySizedBox(
@@ -70,7 +71,7 @@ class InviteUserSheetState extends State<InviteUserSheet> {
                   ),
                 ),
                 Expanded(
-                  child: Consumer<AuthProvider>(
+                  child: Consumer<ContactProvider>(
                     builder: (context, provider, child) {
                       return ListView.builder(
                         itemCount: provider.filteredUsers.length,

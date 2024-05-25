@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:livelynk/providers/contact_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:livelynk/providers/auth_provider.dart';
 
 class MyChatsPage extends StatefulWidget {
   const MyChatsPage({super.key});
@@ -18,13 +18,13 @@ class MyChatsPageState extends State<MyChatsPage> {
 
   init() async {
     await Future.delayed(Duration.zero).whenComplete(() =>
-        Provider.of<AuthProvider>(context, listen: false).fetchChatUsers());
+        Provider.of<ContactProvider>(context, listen: false).fetchChatUsers());
   }
 
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text("Impliment chats Tab"),
+      child: Text("Implement My chats Tab"),
     );
   }
 }

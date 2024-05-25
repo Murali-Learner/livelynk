@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:livelynk/providers/contact_provider.dart';
 import 'package:livelynk/utils/enums/button_status_enum.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:livelynk/models/user_model.dart';
-import 'package:livelynk/providers/auth_provider.dart';
 import 'package:livelynk/utils/extensions/naming_extension.dart';
 
 class UserTile extends StatelessWidget {
-  final User contact;
+  final Contact contact;
   final ButtonStatus status;
 
   const UserTile({super.key, required this.contact, required this.status});
@@ -45,7 +45,7 @@ class UserTile extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 icon: const Icon(Icons.delete),
                 onPressed: () async {
-                  await Provider.of<AuthProvider>(context, listen: false)
+                  await Provider.of<ContactProvider>(context, listen: false)
                       .deleteContact(contact.contactId!);
                 },
               ),
@@ -54,7 +54,7 @@ class UserTile extends StatelessWidget {
                 message: "Decline Request",
                 child: InkWell(
                   onTap: () async {
-                    await Provider.of<AuthProvider>(context, listen: false)
+                    await Provider.of<ContactProvider>(context, listen: false)
                         .deleteContact(contact.contactId!);
                   },
                   child: SvgPicture.asset(
@@ -70,7 +70,7 @@ class UserTile extends StatelessWidget {
                 tooltip: "Accept Request",
                 icon: const Icon(Icons.check),
                 onPressed: () async {
-                  await Provider.of<AuthProvider>(context, listen: false)
+                  await Provider.of<ContactProvider>(context, listen: false)
                       .acceptContactRequest(contact.contactId!);
                 },
               ),

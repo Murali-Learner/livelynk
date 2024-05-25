@@ -9,7 +9,7 @@ class HiveService {
   static final HiveService _hiveService = HiveService._internal();
   static const String _boxName = 'userBox';
   static Box<dynamic>? _box;
-  static User? currentUser;
+  static Contact? currentUser;
   factory HiveService() {
     return _hiveService;
   }
@@ -34,7 +34,7 @@ class HiveService {
     Hive.registerAdapter(RoomAdapter());
   }
 
-  static Future<void> saveUser(User user) async {
+  static Future<void> saveUser(Contact user) async {
     await init();
     currentUser = user;
     await _box!.put('username', user);
@@ -42,7 +42,7 @@ class HiveService {
 
   static Future<void> setUsername() async {
     await init();
-    currentUser = (_box!.get('username') as User?);
+    currentUser = (_box!.get('username') as Contact?);
   }
 
   static Future<void> clearDB() async {
