@@ -41,50 +41,48 @@ class InviteUserSheetState extends State<InviteUserSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<ContactProvider>();
-    return provider.isLoading
-        ? const LoadingWidget()
-        : FractionallySizedBox(
-            heightFactor: 0.9,
-            child: Column(
-              children: [
-                10.vSpace,
-                const Text(
-                  'Invite Users',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                10.vSpace,
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: TextField(
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      labelText: 'Search Users',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Consumer<ContactProvider>(
-                    builder: (context, provider, child) {
-                      return ListView.builder(
-                        itemCount: provider.filteredUsers.length,
-                        itemBuilder: (context, index) {
-                          var user = provider.filteredUsers[index];
-                          return InviteUserTile(user: user);
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
+    // final provider = context.watch<ContactProvider>();
+    return FractionallySizedBox(
+      heightFactor: 0.9,
+      child: Column(
+        children: [
+          10.vSpace,
+          const Text(
+            'Invite Users',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-          );
+          ),
+          10.vSpace,
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                labelText: 'Search Users',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Consumer<ContactProvider>(
+              builder: (context, provider, child) {
+                return ListView.builder(
+                  itemCount: provider.filteredUsers.length,
+                  itemBuilder: (context, index) {
+                    var user = provider.filteredUsers[index];
+                    return InviteUserTile(user: user);
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

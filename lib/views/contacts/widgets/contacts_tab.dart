@@ -65,10 +65,10 @@ class _ContactsTabState extends State<ContactsTab> {
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(vertical: 5),
                           itemCount: userList.length,
                           itemBuilder: (context, index) {
                             final user = userList[index];
-
                             return UserTile(
                               contact: user,
                               status: widget.status == ContactStatus.ACCEPTED

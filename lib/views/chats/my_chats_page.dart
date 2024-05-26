@@ -23,8 +23,14 @@ class MyChatsPageState extends State<MyChatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Implement My chats Tab"),
+    return const Column(
+      children: [
+        // Expanded(child: ListView.builder(
+        //   itemBuilder: (context, index) {
+        //     return const ListTile();
+        //   },
+        // ))
+      ],
     );
   }
 }

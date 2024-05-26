@@ -3,8 +3,8 @@ import 'package:livelynk/models/user_model.dart';
 import 'package:livelynk/providers/contact_provider.dart';
 import 'package:provider/provider.dart';
 
-class InviteUserTile extends StatelessWidget {
-  const InviteUserTile({
+class ChatContactTile extends StatelessWidget {
+  const ChatContactTile({
     super.key,
     required this.user,
   });
@@ -20,12 +20,6 @@ class InviteUserTile extends StatelessWidget {
       ),
       title: Text(user.username),
       subtitle: Text(user.email!),
-      trailing: TextButton(
-        onPressed: () async {
-          await provider.addContact(user.email!);
-        },
-        child: const Text('Invite'),
-      ),
     );
   }
 }

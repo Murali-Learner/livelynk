@@ -32,7 +32,7 @@ class ContactsPageState extends State<ContactsPage>
                 TabBar(
                   onTap: (int index) async {},
                   tabs: const [
-                    Tab(text: 'Invite'), //yours sent invites
+                    Tab(text: 'Invited'), //yours sent invites
                     Tab(text: 'Accepted'), //yours accepted requests
                     Tab(text: 'Requests'), //your requests form others
                   ],

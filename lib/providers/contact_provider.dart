@@ -90,9 +90,10 @@ class ContactProvider extends ChangeNotifier {
   Future<void> addContact(String requestedMail) async {
     try {
       final response = await ContactApiService.addContact(
-          int.parse(HiveService.currentUser!.userId!), requestedMail);
+        int.parse(HiveService.currentUser!.userId!),
+        requestedMail,
+      );
       final Map<String, dynamic> responseData = json.decode(response.first);
-      log(responseData.toString());
       if (responseData['data']) {
         // invitedUsers.removeWhere((element) => element.email == requestedMail);
 
@@ -111,12 +112,9 @@ class ContactProvider extends ChangeNotifier {
       // _setErrorMessage(e.toString());
       showErrorToast(message: e.toString());
     }
-    _setLoading(false);
   }
 
   Future<void> deleteContact(String contactUserId) async {
-    _setLoading(true);
-
     try {
       final response = await ContactApiService.deleteContact(contactUserId);
       final Map<String, dynamic> responseData = json.decode(response.first);
@@ -138,7 +136,6 @@ class ContactProvider extends ChangeNotifier {
       // _setErrorMessage(e.toString());
       showErrorToast(message: e.toString());
     }
-    _setLoading(false);
   }
 
   Future<void> fetchAllUsers() async {

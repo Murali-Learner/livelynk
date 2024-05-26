@@ -15,11 +15,11 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      elevation: 4,
+      elevation: 2,
       child: ListTile(
         onTap: () {},
         contentPadding:

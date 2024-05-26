@@ -39,6 +39,7 @@ class HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black45,
         automaticallyImplyLeading: false,
         title: Text('Hey ${HiveService.currentUser!.username.toPascalCase()}!'),
         actions: [
@@ -55,6 +56,9 @@ class HomePageState extends State<HomePage> {
         return _screens[provider.selectedIndex];
       }),
       bottomNavigationBar: BottomNavigationBar(
+        enableFeedback: true,
+        selectedItemColor: Colors.green,
+        // unselectedItemColor: Colors.white54,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
