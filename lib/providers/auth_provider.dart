@@ -28,6 +28,7 @@ class AuthProvider with ChangeNotifier {
           userId: responseData['user']['userId'].toString(),
           username: username,
           email: email,
+          roomId: responseData["user"]["roomId"].toString(),
         );
         _user = newUser;
         await HiveService.saveUser(newUser);
@@ -55,6 +56,7 @@ class AuthProvider with ChangeNotifier {
           userId: responseData['user']['userId'].toString(),
           email: responseData['user']['email'].toString(),
           username: responseData['user']['username'].toString(),
+          roomId: responseData["user"]["roomId"].toString(),
         );
         _user = loggedInUser;
         await HiveService.saveUser(loggedInUser);

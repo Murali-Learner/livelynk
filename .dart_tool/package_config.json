@@ -440,6 +440,18 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "socket_io_client",
+      "rootUri": "file:///C:/Users/mavud/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_client-3.0.0-beta.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "socket_io_common",
+      "rootUri": "file:///C:/Users/mavud/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_common-3.0.0-beta.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "source_gen",
       "rootUri": "file:///C:/Users/mavud/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-1.5.0",
       "packageUri": "lib/",
@@ -584,7 +596,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-05-25T11:10:11.489662Z",
+  "generated": "2024-05-28T06:15:47.484014Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }

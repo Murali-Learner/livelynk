@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livelynk/providers/contact_provider.dart';
+import 'package:livelynk/providers/home_chat_provider.dart';
 import 'package:livelynk/providers/home_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:livelynk/app.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<ContactProvider>(
           create: (context) => ContactProvider(),
+        ),
+        ChangeNotifierProvider<HomeChatProvider>(
+          create: (context) => HomeChatProvider(),
         ),
       ],
       child: MaterialApp(

@@ -10,7 +10,10 @@ import 'package:livelynk/utils/toast.dart';
 
 class ContactApiService {
   static Future<List<Contact>> fetchContacts(
-      String userId, ContactStatus status, bool isSendContact) async {
+    String userId,
+    ContactStatus status,
+    bool isSendContact,
+  ) async {
     final response = await HttpService.send(
       'GET',
       '${APIRoutes.getContacts}contactId=$userId&status=${status.toShortString()}&isSendContact=$isSendContact',
@@ -69,8 +72,18 @@ class ContactApiService {
   }
 
   static Future<List<Contact>> fetchChatContacts(String userId) async {
-    // Placeholder for actual implementation
-    return [];
+    final response = await HttpService.send(
+      'GET',
+      '${APIRoutes.getChatContacts}currentUserId=$userId',
+    );
+
+    if (response.last == 200) {
+      final contacts = json.decode(response.first)['data'] as List;
+      return contacts.map((data) => Contact.fromJson(data)).toList();
+    } else {
+      showErrorToast();
+      throw Exception('Failed to fetch users');
+    }
   }
 
   static Future<Set> inviteRoom(

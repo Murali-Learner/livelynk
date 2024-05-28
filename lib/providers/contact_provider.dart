@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:livelynk/models/user_model.dart';
 import 'package:livelynk/services/hive_service.dart';
@@ -28,10 +27,10 @@ class ContactProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   Contact? get user => _user;
   //
-  Future<void> fetchUsers(
-    ContactStatus status,
-    bool isSendContact,
-  ) async {
+  Future<void> fetchUsers({
+    required ContactStatus status,
+    required bool isSendContact,
+  }) async {
     _setLoading(true);
     try {
       if (status == ContactStatus.ACCEPTED) {
@@ -101,7 +100,10 @@ class ContactProvider extends ChangeNotifier {
         filteredUsers.removeWhere((element) => element.email == requestedMail);
         allUsers.removeWhere((element) => element.email == requestedMail);
 
-        await fetchUsers(ContactStatus.INVITED, true);
+        await fetchUsers(
+          status: ContactStatus.INVITED,
+          isSendContact: true,
+        );
         showSuccessToast(message: "Contact Invited");
         notifyListeners();
       } else {
@@ -168,37 +170,13 @@ class ContactProvider extends ChangeNotifier {
     try {
       _chatUsers.clear();
       _chatUsers = await ContactApiService.fetchChatContacts(
-          HiveService.currentUser!.userId!);
-
+        HiveService.currentUser!.userId!,
+      );
       notifyListeners();
     } catch (e) {
       // _setErrorMessage(e.toString());
       showErrorToast(message: e.toString());
     }
-  }
-
-  Future<void> inviteRoom(
-      String currentUserId, String contactUserId, String roomId) async {
-    _setLoading(true);
-    try {
-      final response = await ContactApiService.inviteRoom(
-          currentUserId, contactUserId, roomId);
-      if (response.lastOrNull == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.first);
-        debugPrint("invite room res $responseData");
-        final contacts = json.decode(response.first)['remainingContacts'];
-
-        _invitedUsers.clear();
-        _invitedUsers =
-            (contacts as List).map((data) => Contact.fromJson(data)).toList();
-      } else {
-        showErrorToast(message: json.decode(response.first)['message']);
-      }
-    } catch (e) {
-      // _setErrorMessage(e.toString());
-      showErrorToast(message: e.toString());
-    }
-    _setLoading(false);
   }
 
   void _setLoading(bool value) {

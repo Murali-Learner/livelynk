@@ -12,7 +12,9 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => ChatProvider(SocketService('ws://localhost:3000')),
+      create: (_) => ChatProvider(
+        SocketService('wss://b2c6-157-10-167-27.ngrok-free.app'),
+      ),
       child: ChatScreen(roomId: contact.roomId!),
     );
   }

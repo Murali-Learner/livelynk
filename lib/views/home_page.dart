@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:livelynk/providers/home_chat_provider.dart';
 import 'package:livelynk/providers/home_provider.dart';
 import 'package:livelynk/views/calls/calls_page.dart';
 import 'package:livelynk/views/chats/my_chats_page.dart';
@@ -20,8 +21,12 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  late HomeChatProvider _homeChatProvider;
+
   @override
   void initState() {
+    _homeChatProvider = context.read<HomeChatProvider>();
+    _homeChatProvider.connectSocket();
     log("user id ${HiveService.currentUser!.userId}");
     super.initState();
   }

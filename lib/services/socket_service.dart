@@ -7,7 +7,7 @@ class SocketService {
   SocketService(this.baseUrl);
 
   WebSocketChannel joinRoom(String roomId) {
-    final channel = IOWebSocketChannel.connect('$baseUrl/$roomId');
+    final channel = IOWebSocketChannel.connect(baseUrl);
     return channel;
   }
 

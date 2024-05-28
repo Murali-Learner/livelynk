@@ -84,7 +84,8 @@ class LoginPage extends StatelessWidget {
                                     await provider.login(email, password);
                                 if (success) {
                                   context.pushReplacement(
-                                      navigateTo: const HomePage());
+                                    navigateTo: const HomePage(),
+                                  );
                                 } else {
                                   showErrorToast(
                                       message: provider.errorMessage ??

@@ -29,18 +29,25 @@ class _ContactsTabState extends State<ContactsTab> {
 
   init() async {
     if (widget.status == ContactStatus.ACCEPTED) {
-      await Future.delayed(Duration.zero).whenComplete(() =>
-          Provider.of<ContactProvider>(context, listen: false)
-              .fetchUsers(ContactStatus.ACCEPTED, false));
+      await Future.delayed(Duration.zero).whenComplete(
+        () => Provider.of<ContactProvider>(context, listen: false).fetchUsers(
+          status: ContactStatus.ACCEPTED,
+          isSendContact: false,
+        ),
+      );
     } else if (widget.isSendContact) {
       await Future.delayed(Duration.zero).whenComplete(() {
-        Provider.of<ContactProvider>(context, listen: false)
-            .fetchUsers(ContactStatus.INVITED, true);
+        Provider.of<ContactProvider>(context, listen: false).fetchUsers(
+          status: ContactStatus.INVITED,
+          isSendContact: true,
+        );
       });
     } else {
       await Future.delayed(Duration.zero).whenComplete(() {
-        Provider.of<ContactProvider>(context, listen: false)
-            .fetchUsers(ContactStatus.INVITED, false);
+        Provider.of<ContactProvider>(context, listen: false).fetchUsers(
+          status: ContactStatus.INVITED,
+          isSendContact: false,
+        );
       });
     }
   }
