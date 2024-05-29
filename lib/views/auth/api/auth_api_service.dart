@@ -1,5 +1,5 @@
 import 'package:livelynk/services/http_service.dart';
-import 'package:livelynk/services/routes.dart';
+import 'package:livelynk/services/api_routes.dart';
 
 class AuthApiService {
   static Future<Set> register(

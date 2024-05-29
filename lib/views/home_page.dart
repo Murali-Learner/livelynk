@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:livelynk/providers/home_chat_provider.dart';
 import 'package:livelynk/providers/home_provider.dart';
+import 'package:livelynk/providers/user_chat_provider.dart';
 import 'package:livelynk/views/calls/calls_page.dart';
-import 'package:livelynk/views/chats/my_chats_page.dart';
+import 'package:livelynk/views/chats/chat_home/chat_home_page.dart';
 import 'package:livelynk/views/contacts/contacts_page.dart';
 import 'package:provider/provider.dart';
 import 'package:livelynk/providers/auth_provider.dart';
@@ -22,17 +23,24 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   late HomeChatProvider _homeChatProvider;
+  late UserChatProvider userChatProvider;
 
   @override
   void initState() {
     _homeChatProvider = context.read<HomeChatProvider>();
-    _homeChatProvider.connectSocket();
+    userChatProvider = Provider.of<UserChatProvider>(context, listen: false);
+
+    _homeChatProvider.connectSocket(
+      context: context,
+      userChatProvider: userChatProvider,
+    );
+    _homeChatProvider.fetchChatUsers();
     log("user id ${HiveService.currentUser!.userId}");
     super.initState();
   }
 
   final List<Widget> _screens = [
-    const MyChatsPage(),
+    const ChatHomePage(),
     const ContactsPage(),
     const CallsPage()
   ];

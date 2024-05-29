@@ -1,34 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:livelynk/providers/contact_provider.dart';
+import 'package:livelynk/models/contact_model.dart';
 import 'package:livelynk/providers/home_chat_provider.dart';
-import 'package:livelynk/services/home_socket.dart';
 import 'package:livelynk/views/chats/widgets/chat_contact_tile.dart';
 import 'package:provider/provider.dart';
 
-class MyChatsPage extends StatefulWidget {
-  const MyChatsPage({super.key});
+class ChatHomePage extends StatefulWidget {
+  const ChatHomePage({super.key});
 
   @override
-  MyChatsPageState createState() => MyChatsPageState();
+  ChatHomePageState createState() => ChatHomePageState();
 }
 
-class MyChatsPageState extends State<MyChatsPage> {
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  init() async {
-    await Future.delayed(Duration.zero).whenComplete(
-      () =>
-          Provider.of<ContactProvider>(context, listen: false).fetchChatUsers(),
-    );
-  }
-
+class ChatHomePageState extends State<ChatHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ContactProvider>(builder: (context, provider, _) {
+    return Consumer<HomeChatProvider>(builder: (context, provider, _) {
       return Column(
         children: [
           Expanded(
@@ -42,7 +28,9 @@ class MyChatsPageState extends State<MyChatsPage> {
                 : ListView.builder(
                     itemCount: provider.chatUsers.length,
                     itemBuilder: (context, index) {
-                      return ChatContactTile(user: provider.chatUsers[index]);
+                      final int key = provider.chatUsers.keys.elementAt(index);
+                      final Contact contact = provider.chatUsers[key]!;
+                      return ChatContactTile(user: contact);
                     },
                   ),
           )

@@ -8,8 +8,8 @@ import 'package:livelynk/views/auth/api/auth_api_service.dart';
 class AuthProvider with ChangeNotifier {
   bool _obscureText = true;
   bool get obscureText => _obscureText;
-  Contact? _user;
-  Contact? get user => _user;
+  User? _user;
+  User? get user => _user;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -24,8 +24,8 @@ class AuthProvider with ChangeNotifier {
 
       if (response.lastOrNull == 200) {
         final Map<String, dynamic> responseData = json.decode(response.first);
-        final Contact newUser = Contact(
-          userId: responseData['user']['userId'].toString(),
+        final User newUser = User(
+          userId: responseData['user']['userId'],
           username: username,
           email: email,
           roomId: responseData["user"]["roomId"].toString(),
@@ -52,8 +52,8 @@ class AuthProvider with ChangeNotifier {
       if (response.lastOrNull == 200) {
         final Map<String, dynamic> responseData = json.decode(response.first);
 
-        final Contact loggedInUser = Contact(
-          userId: responseData['user']['userId'].toString(),
+        final User loggedInUser = User(
+          userId: responseData['user']['userId'],
           email: responseData['user']['email'].toString(),
           username: responseData['user']['username'].toString(),
           roomId: responseData["user"]["roomId"].toString(),

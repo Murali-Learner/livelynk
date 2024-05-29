@@ -1,18 +1,21 @@
 import 'package:hive/hive.dart';
-part 'chat_messsage.g.dart';
+import 'package:livelynk/services/hive_service.dart';
+part 'chat_message.g.dart';
 
-@HiveType(typeId: 1)
+@HiveType(typeId: 2)
 class ChatMessage {
   @HiveField(0)
   final String messageId;
   @HiveField(1)
   final DateTime timeSent;
   @HiveField(2)
-  final String from;
+  final int from;
   @HiveField(3)
-  final String to;
+  final int to;
   @HiveField(4)
   final String message;
+
+  bool get isMe => from == HiveService.currentUser?.userId;
 
   ChatMessage({
     required this.messageId,
@@ -24,10 +27,10 @@ class ChatMessage {
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
-      messageId: json['messageId'],
-      timeSent: DateTime.parse(json['timeSent']),
-      from: json['from'],
-      to: json['to'],
+      messageId: json['chatId'],
+      timeSent: DateTime.parse(json['timestamp']),
+      from: json['senderId'],
+      to: json['receiverId'],
       message: json['message'],
     );
   }

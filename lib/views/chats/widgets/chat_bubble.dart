@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:livelynk/models/chat_message.dart';
 
 class ChatBubble extends StatelessWidget {
-  final String message;
-  final bool isMe;
+  final ChatMessage message;
 
   const ChatBubble({
     super.key,
     required this.message,
-    required this.isMe,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool isMe = message.isMe;
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -29,7 +29,7 @@ class ChatBubble extends StatelessWidget {
           ),
         ),
         child: Text(
-          message,
+          message.message,
           style: TextStyle(color: isMe ? Colors.white : Colors.black),
         ),
       ),

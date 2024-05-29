@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:livelynk/models/user_model.dart';
+import 'package:livelynk/models/contact_model.dart';
 import 'package:livelynk/services/hive_service.dart';
 import 'package:livelynk/utils/enums/contact_status_enum.dart';
 import 'package:livelynk/utils/toast.dart';
@@ -9,18 +9,15 @@ import 'package:livelynk/views/contacts/api/contact_api_service.dart';
 
 class ContactProvider extends ChangeNotifier {
   ContactProvider();
-  List<Contact> _allUsers = [];
-  List<Contact> _chatUsers = [];
-  List<Contact> _invitedUsers = [];
-  List<Contact> _requestedUsers = [];
-  List<Contact> _acceptedUsers = [];
-  List<Contact> _filteredUsers = [];
-  List<Contact> get filteredUsers => _filteredUsers;
-  List<Contact> get allUsers => _allUsers;
-  List<Contact> get requestedUsers => _requestedUsers;
-  List<Contact> get acceptedUsers => _acceptedUsers;
-  List<Contact> get chatUsers => _chatUsers;
-  List<Contact> get invitedUsers => _invitedUsers;
+  Map<int, Contact> _unRequestedUsers = {};
+  final Map<int, Contact> _chatUsers = {};
+  Map<int, Contact> _invitedUsers = {};
+  Map<int, Contact> _requestedUsers = {};
+  Map<int, Contact> _acceptedUsers = {};
+  Map<int, Contact> get unRequestedUsers => _unRequestedUsers;
+  Map<int, Contact> get requestedUsers => _requestedUsers;
+  Map<int, Contact> get acceptedUsers => _acceptedUsers;
+  Map<int, Contact> get invitedUsers => _invitedUsers;
 
   Contact? _user;
   bool _isLoading = false;
@@ -61,16 +58,17 @@ class ContactProvider extends ChangeNotifier {
     _setLoading(false);
   }
 
-  Future<void> acceptContactRequest(String contactUserId) async {
+  Future<void> acceptContactRequest(Contact contact) async {
     _setLoading(true);
     try {
       final response = await ContactApiService.acceptContactRequest(
-          contactUserId, int.parse(HiveService.currentUser!.userId!));
+        contact.contactId ?? "",
+        (HiveService.currentUser!.userId!),
+      );
       final Map<String, dynamic> responseData = json.decode(response.first);
 
       if (responseData['data']) {
-        requestedUsers
-            .removeWhere((element) => element.contactId == contactUserId);
+        requestedUsers.remove(contact.userId);
         showSuccessToast(message: "Contact Added");
         notifyListeners();
         // _setErrorMessage(null);
@@ -86,19 +84,16 @@ class ContactProvider extends ChangeNotifier {
     _setLoading(false);
   }
 
-  Future<void> addContact(String requestedMail) async {
+  Future<void> addContact(int requestUserId) async {
     try {
       final response = await ContactApiService.addContact(
-        int.parse(HiveService.currentUser!.userId!),
-        requestedMail,
+        (HiveService.currentUser!.userId!),
+        requestUserId,
       );
       final Map<String, dynamic> responseData = json.decode(response.first);
       if (responseData['data']) {
-        // invitedUsers.removeWhere((element) => element.email == requestedMail);
-
-        acceptedUsers.removeWhere((element) => element.email == requestedMail);
-        filteredUsers.removeWhere((element) => element.email == requestedMail);
-        allUsers.removeWhere((element) => element.email == requestedMail);
+        acceptedUsers.remove(requestUserId);
+        unRequestedUsers.remove(requestUserId);
 
         await fetchUsers(
           status: ContactStatus.INVITED,
@@ -116,16 +111,22 @@ class ContactProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteContact(String contactUserId) async {
+  Future<void> deleteContact(
+    Contact contact, {
+    bool isRequestedContact = false,
+  }) async {
     try {
-      final response = await ContactApiService.deleteContact(contactUserId);
+      final response = await ContactApiService.deleteContact(
+        contact.contactId ?? "",
+      );
       final Map<String, dynamic> responseData = json.decode(response.first);
 
       if (responseData['data']) {
-        invitedUsers
-            .removeWhere((element) => element.contactId == contactUserId);
-        acceptedUsers
-            .removeWhere((element) => element.contactId == contactUserId);
+        invitedUsers.remove(contact.userId);
+        acceptedUsers.remove(contact.userId);
+        if (isRequestedContact) {
+          requestedUsers.remove(contact.userId);
+        }
 
         showSuccessToast(message: "Contact deleted");
         notifyListeners();
@@ -142,11 +143,9 @@ class ContactProvider extends ChangeNotifier {
 
   Future<void> fetchAllUsers() async {
     try {
-      _allUsers.clear();
-      _allUsers = await ContactApiService.fetchTotalContacts(
+      _unRequestedUsers.clear();
+      _unRequestedUsers = await ContactApiService.fetchTotalContacts(
           HiveService.currentUser!.userId!);
-      _filteredUsers.clear();
-      _filteredUsers.addAll(_allUsers);
 
       notifyListeners();
     } catch (e) {
@@ -157,26 +156,12 @@ class ContactProvider extends ChangeNotifier {
 
   void filterUsers(String query) {
     query = query.toLowerCase();
-    _filteredUsers.clear();
-    _filteredUsers = _allUsers.where((user) {
-      return user.username.toLowerCase().contains(query) ||
-          user.email!.toLowerCase().contains(query);
-    }).toList();
-    notifyListeners();
-  }
-
-//not working
-  Future<void> fetchChatUsers() async {
-    try {
-      _chatUsers.clear();
-      _chatUsers = await ContactApiService.fetchChatContacts(
-        HiveService.currentUser!.userId!,
-      );
-      notifyListeners();
-    } catch (e) {
-      // _setErrorMessage(e.toString());
-      showErrorToast(message: e.toString());
-    }
+    // TODO: implement in future
+    // _allUsers = _allUsers.where((user) {
+    //   return user.username.toLowerCase().contains(query) ||
+    //       user.email!.toLowerCase().contains(query);
+    // }).toList();
+    // notifyListeners();
   }
 
   void _setLoading(bool value) {

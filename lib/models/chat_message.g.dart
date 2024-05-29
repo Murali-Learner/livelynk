@@ -1,38 +1,44 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'room_model.dart';
+part of 'chat_message.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class RoomAdapter extends TypeAdapter<Room> {
+class ChatMessageAdapter extends TypeAdapter<ChatMessage> {
   @override
   final int typeId = 2;
 
   @override
-  Room read(BinaryReader reader) {
+  ChatMessage read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Room(
-      roomId: fields[0] as String?,
-      users: (fields[1] as List).cast<String>(),
-      messages: (fields[2] as List).cast<ChatMessage>(),
+    return ChatMessage(
+      messageId: fields[0] as String,
+      timeSent: fields[1] as DateTime,
+      from: fields[2] as int,
+      to: fields[3] as int,
+      message: fields[4] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Room obj) {
+  void write(BinaryWriter writer, ChatMessage obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.roomId)
+      ..write(obj.messageId)
       ..writeByte(1)
-      ..write(obj.users)
+      ..write(obj.timeSent)
       ..writeByte(2)
-      ..write(obj.messages);
+      ..write(obj.from)
+      ..writeByte(3)
+      ..write(obj.to)
+      ..writeByte(4)
+      ..write(obj.message);
   }
 
   @override
@@ -41,7 +47,7 @@ class RoomAdapter extends TypeAdapter<Room> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RoomAdapter &&
+      other is ChatMessageAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

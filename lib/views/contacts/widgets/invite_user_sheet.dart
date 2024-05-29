@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:livelynk/models/contact_model.dart';
 import 'package:livelynk/providers/contact_provider.dart';
-import 'package:livelynk/views/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:livelynk/utils/extensions/spacer_extension.dart';
 import 'package:livelynk/views/contacts/widgets/invite_user_tile.dart';
@@ -55,27 +55,30 @@ class InviteUserSheetState extends State<InviteUserSheet> {
             ),
           ),
           10.vSpace,
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                labelText: 'Search Users',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-              ),
-            ),
-          ),
+          // TODO: add this in feature
+          // Padding(
+          //   padding: const EdgeInsets.all(5.0),
+          //   child: TextField(
+          //     controller: searchController,
+          //     decoration: InputDecoration(
+          //       labelText: 'Search Users',
+          //       prefixIcon: const Icon(Icons.search),
+          //       border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(15.0),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Expanded(
             child: Consumer<ContactProvider>(
               builder: (context, provider, child) {
                 return ListView.builder(
-                  itemCount: provider.filteredUsers.length,
+                  itemCount: provider.unRequestedUsers.length,
                   itemBuilder: (context, index) {
-                    var user = provider.filteredUsers[index];
-                    return InviteUserTile(user: user);
+                    final int key =
+                        provider.unRequestedUsers.keys.elementAt(index);
+                    final Contact user = provider.unRequestedUsers[key]!;
+                    return InviteUserTile(contact: user);
                   },
                 );
               },

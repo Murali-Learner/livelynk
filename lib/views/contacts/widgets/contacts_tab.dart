@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:livelynk/models/contact_model.dart';
 import 'package:livelynk/models/user_model.dart';
 import 'package:livelynk/providers/contact_provider.dart';
 import 'package:livelynk/utils/enums/button_status_enum.dart';
@@ -56,11 +57,12 @@ class _ContactsTabState extends State<ContactsTab> {
   Widget build(BuildContext context) {
     return Consumer<ContactProvider>(
       builder: (context, provider, _) {
-        final List<Contact> userList = widget.status == ContactStatus.ACCEPTED
-            ? provider.acceptedUsers
-            : widget.isSendContact
-                ? provider.invitedUsers
-                : provider.requestedUsers;
+        final Map<int, Contact> userList =
+            widget.status == ContactStatus.ACCEPTED
+                ? provider.acceptedUsers
+                : widget.isSendContact
+                    ? provider.invitedUsers
+                    : provider.requestedUsers;
         return provider.isLoading
             ? const LoadingWidget()
             : userList.isEmpty
@@ -72,11 +74,13 @@ class _ContactsTabState extends State<ContactsTab> {
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
-                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.only(top: 3, bottom: 60),
                           itemCount: userList.length,
                           itemBuilder: (context, index) {
-                            final user = userList[index];
-                            return UserTile(
+                            final int key = userList.keys.elementAt(index);
+                            final Contact user = userList[key]!;
+
+                            return ContactTile(
                               contact: user,
                               status: widget.status == ContactStatus.ACCEPTED
                                   ? ButtonStatus.ACCEPTED

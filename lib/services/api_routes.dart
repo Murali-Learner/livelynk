@@ -1,5 +1,5 @@
 class APIRoutes {
-  static const baseUrl = 'https://b1e0-103-149-59-221.ngrok-free.app';
+  static const baseUrl = 'https://d9fe-103-149-58-237.ngrok-free.app';
 
   //auth Routes
   static const login = '$baseUrl/auth/login';
@@ -12,4 +12,7 @@ class APIRoutes {
   static const getContacts = '$baseUrl/contact/getContacts?';
   static const getAllContacts = '$baseUrl/contact/getAllContacts?';
   static const getChatContacts = '$baseUrl/contact/getChatContacts?';
+
+  // CHAT
+  static const getChatHistory = '$baseUrl/chat/getChatHistory?';
 }

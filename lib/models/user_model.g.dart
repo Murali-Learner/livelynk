@@ -6,31 +6,33 @@ part of 'user_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserAdapter extends TypeAdapter<Contact> {
+class UserAdapter extends TypeAdapter<User> {
   @override
   final int typeId = 0;
 
   @override
-  Contact read(BinaryReader reader) {
+  User read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Contact(
+    return User(
       username: fields[1] as String,
-      userId: fields[0] as String?,
-      roomId: fields[5] as String?,
-      contactId: fields[6] as String?,
+      userId: fields[0] as int?,
+      roomId: fields[3] as String?,
       email: fields[2] as String?,
-      contacts: (fields[3] as List).cast<Contact>(),
-      rooms: (fields[4] as List).cast<Room>(),
+      unRequestedUsers: (fields[4] as Map?)?.cast<int, Contact>(),
+      requestedUsers: (fields[5] as Map?)?.cast<int, Contact>(),
+      invitedUsers: (fields[6] as Map?)?.cast<int, Contact>(),
+      acceptedUsers: (fields[7] as Map?)?.cast<int, Contact>(),
+      originalUsers: (fields[8] as Map?)?.cast<int, Contact>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, Contact obj) {
+  void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -38,13 +40,17 @@ class UserAdapter extends TypeAdapter<Contact> {
       ..writeByte(2)
       ..write(obj.email)
       ..writeByte(3)
-      ..write(obj.contacts)
-      ..writeByte(4)
-      ..write(obj.rooms)
-      ..writeByte(5)
       ..write(obj.roomId)
+      ..writeByte(4)
+      ..write(obj.unRequestedUsers)
+      ..writeByte(5)
+      ..write(obj.requestedUsers)
       ..writeByte(6)
-      ..write(obj.contactId);
+      ..write(obj.invitedUsers)
+      ..writeByte(7)
+      ..write(obj.acceptedUsers)
+      ..writeByte(8)
+      ..write(obj.originalUsers);
   }
 
   @override

@@ -1,16 +1,17 @@
 import 'dart:convert';
 
+import 'package:livelynk/models/contact_model.dart';
 import 'package:livelynk/models/user_model.dart';
 import 'package:livelynk/services/hive_service.dart';
 import 'package:livelynk/services/http_service.dart';
-import 'package:livelynk/services/routes.dart';
+import 'package:livelynk/services/api_routes.dart';
 import 'package:livelynk/utils/enums/contact_status_enum.dart';
 import 'package:livelynk/utils/extensions/contact_extension.dart';
 import 'package:livelynk/utils/toast.dart';
 
 class ContactApiService {
-  static Future<List<Contact>> fetchContacts(
-    String userId,
+  static Future<Map<int, Contact>> fetchContacts(
+    int? userId,
     ContactStatus status,
     bool isSendContact,
   ) async {
@@ -21,11 +22,22 @@ class ContactApiService {
 
     if (response.last == 200) {
       final body = json.decode(response.first);
-      final contacts = body['data'] as List;
-      return contacts.map((data) => Contact.fromJson(data)).toList();
+      final contacts = body['data'] as List<dynamic>;
+
+      return getContactMap(contacts);
     } else {
       throw Exception('Failed to fetch users');
     }
+  }
+
+  static Map<int, Contact> getContactMap(List<dynamic> contacts) {
+    Map<int, Contact> contactsMap = Map.fromEntries(
+      contacts.map((data) {
+        final contact = Contact.fromJson(data);
+        return MapEntry(contact.userId ?? 0, contact);
+      }),
+    );
+    return contactsMap;
   }
 
   static Future<Set> acceptContactRequest(
@@ -48,38 +60,38 @@ class ContactApiService {
     );
   }
 
-  static Future<Set> addContact(int currentUserId, String requestedMail) async {
+  static Future<Set> addContact(int currentUserId, int requestUserId) async {
     return await HttpService.send(
       'POST',
       APIRoutes.addContact,
-      {'requestedMail': requestedMail.trim(), 'currentUserId': currentUserId},
+      {'requestUserId': requestUserId, 'currentUserId': currentUserId},
     );
   }
 
-  static Future<List<Contact>> fetchTotalContacts(String userId) async {
+  static Future<Map<int, Contact>> fetchTotalContacts(int? userId) async {
     final response = await HttpService.send(
       'GET',
       '${APIRoutes.getAllContacts}userId=$userId',
     );
 
     if (response.last == 200) {
-      final contacts = json.decode(response.first)['data'] as List;
-      return contacts.map((data) => Contact.fromJson(data)).toList();
+      final contacts = json.decode(response.first)['data'] as List<dynamic>;
+      return getContactMap(contacts);
     } else {
       showErrorToast();
       throw Exception('Failed to fetch users');
     }
   }
 
-  static Future<List<Contact>> fetchChatContacts(String userId) async {
+  static Future<Map<int, Contact>> fetchChatContacts(int? userId) async {
     final response = await HttpService.send(
       'GET',
       '${APIRoutes.getChatContacts}currentUserId=$userId',
     );
 
     if (response.last == 200) {
-      final contacts = json.decode(response.first)['data'] as List;
-      return contacts.map((data) => Contact.fromJson(data)).toList();
+      final contacts = json.decode(response.first)['data'] as List<dynamic>;
+      return getContactMap(contacts);
     } else {
       showErrorToast();
       throw Exception('Failed to fetch users');
