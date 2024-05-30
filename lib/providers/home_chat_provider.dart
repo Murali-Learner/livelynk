@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
 import 'package:livelynk/models/chat_message.dart';
 import 'package:livelynk/models/contact_model.dart';
+import 'package:livelynk/models/user_model.dart';
 import 'package:livelynk/providers/user_chat_provider.dart';
 import 'package:livelynk/services/hive_service.dart';
 import 'package:livelynk/services/home_socket.dart';
@@ -16,12 +18,14 @@ class HomeChatProvider extends ChangeNotifier {
   List<ChatMessage> incomingChatMessages = const [];
   Map<int, Contact> _chatUsers = {};
   Map<int, Contact> get chatUsers => _chatUsers;
+  User get currentUser {
+    return HiveService.currentUser!;
+  }
 
   Future<void> fetchChatUsers() async {
     try {
-      _chatUsers.clear();
       _chatUsers = await ContactApiService.fetchChatContacts(
-        HiveService.currentUser!.userId!,
+        currentUser.userId,
       );
       notifyListeners();
     } catch (e) {
@@ -42,35 +46,62 @@ class HomeChatProvider extends ChangeNotifier {
     HomeSocket.instance.onJoinedRoom = (dynamic joinedUserId) {
       print("User Joined $joinedUserId");
     };
-    HomeSocket.instance.onReceivedMessage = (dynamic receivedMessage) {
-      showSuccessToast(message: receivedMessage["message"].toString());
-    };
+
     HomeSocket.instance.connect();
 
-    HomeSocket.instance.socket!.emitWithAck("joinRoom", {
-      "roomId": HiveService.currentUser?.roomId,
-      "userId": HiveService.currentUser?.userId
-    });
-    final int currentUserId = HiveService.currentUser?.userId ?? 0;
-    HomeSocket.instance.socket?.on("received-$currentUserId", (data) {
-      onMessageReceived(data: data, userChatProvider: userChatProvider);
-    });
-    HomeSocket.instance.socket?.on("sentACK-$currentUserId", (messageId) {
-      log("Sent ACK $messageId");
+    HomeSocket.instance.socket!.emitWithAck("joinRoom",
+        {"roomId": currentUser.roomId, "userId": currentUser.userId});
+    log("message-${currentUser.userId}");
+    HomeSocket.instance.socket?.on("message-${currentUser.userId}", (message) {
+      log("Here received $message");
+      if (message == null) {
+        return;
+      }
+      ChatMessage chatMessage = ChatMessage.fromJson(message);
+
+      onMessage(
+        chatMessage: chatMessage,
+        userChatProvider: userChatProvider,
+        isSending: chatMessage.from == currentUser.userId,
+      );
     });
   }
 
-  void onMessageReceived({
-    required dynamic data,
+  void addSendMessageSocketListener({
     required UserChatProvider userChatProvider,
   }) {
-    if (data != null) {
-      ChatMessage chatMessage = ChatMessage.fromJson(data);
-      if (_chatUsers.containsKey(chatMessage.from)) {
+    // log("sentACK-${userChatProvider.contact!.userId}");
+    // HomeSocket.instance.socket
+    //     ?.on("sentACK-${userChatProvider.contact!.userId}", (message) {
+    //   log("Here sent $message");
+    //   onMessage(
+    //     data: message,
+    //     userChatProvider: userChatProvider,
+    //     isSending: true,
+    //   );
+    // });
+  }
+
+  void removeSendMessageSocketListener({
+    required int openedChatUserId,
+  }) {
+    // HomeSocket.instance.socket?.off("sentACK-$openedChatUserId");
+  }
+
+  void onMessage({
+    required ChatMessage chatMessage,
+    required UserChatProvider userChatProvider,
+    bool isSending = false,
+  }) {
+    try {
+      log("I came here");
+      int consideredContactId = isSending ? chatMessage.to : chatMessage.from;
+      if (_chatUsers.containsKey(consideredContactId)) {
         final int? openedChatUserId = userChatProvider.contact?.userId;
-        Contact chatUser = _chatUsers[chatMessage.from]!;
-        chatUser.chatMessages?.add(chatMessage);
-        _chatUsers[chatMessage.from] = chatUser.copyWith(
+
+        Contact chatUser = _chatUsers[consideredContactId]!;
+        chatUser.chatMessages?.insert(0, chatMessage);
+        _chatUsers[consideredContactId] = chatUser.copyWith(
           chatMessages: chatUser.chatMessages,
         );
         if ((openedChatUserId == chatMessage.from) ||
@@ -80,6 +111,8 @@ class HomeChatProvider extends ChangeNotifier {
         }
         notifyListeners();
       }
+    } catch (e) {
+      log(e.toString(), stackTrace: StackTrace.current);
     }
   }
 
@@ -90,22 +123,21 @@ class HomeChatProvider extends ChangeNotifier {
     HomeSocket.instance.socket?.emit("sendMessage", {
       "roomId": toContact.roomId,
       "toUserId": toContact.userId,
-      "fromUserId": HiveService.currentUser?.userId ?? "",
+      "fromUserId": currentUser.userId,
       "message": message
     });
   }
 
   Future<void> getChatHistory({
-    required Contact user,
     required UserChatProvider userChatProvider,
   }) async {
     List<ChatMessage> messages =
-        await ChatApiService.getChatHistory(user.userId!);
-    if (_chatUsers.containsKey(user.userId)) {
-      Contact chatUser = _chatUsers[user.userId]!.copyWith(
+        await ChatApiService.getChatHistory(userChatProvider.contact!.userId!);
+    if (_chatUsers.containsKey(userChatProvider.contact!.userId)) {
+      Contact chatUser = _chatUsers[userChatProvider.contact!.userId]!.copyWith(
         chatMessages: messages,
       );
-      _chatUsers[user.userId!] = chatUser;
+      _chatUsers[userChatProvider.contact!.userId!] = chatUser;
       userChatProvider.setMessages(chatUser.chatMessages ?? []);
 
       notifyListeners();
@@ -113,10 +145,16 @@ class HomeChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void joinRoom(Contact contact) {
+  Future<void> init({
+    required BuildContext context,
+  }) async {
+    UserChatProvider userChatProvider =
+        Provider.of<UserChatProvider>(context, listen: false);
     HomeSocket.instance.socket?.emitWithAck("joinRoom", {
-      "roomId": contact.roomId,
-      "userId": contact.userId,
+      "roomId": userChatProvider.contact?.roomId,
+      "userId": userChatProvider.contact?.userId,
     });
+    await getChatHistory(userChatProvider: userChatProvider);
+    addSendMessageSocketListener(userChatProvider: userChatProvider);
   }
 }

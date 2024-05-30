@@ -87,7 +87,12 @@ class HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: homeProvider.selectedIndex,
-        onTap: (value) => homeProvider.onItemTapped(value),
+        onTap: (value) {
+          if (value == 0) {
+            _homeChatProvider.fetchChatUsers();
+          }
+          homeProvider.onItemTapped(value);
+        },
       ),
     );
   }

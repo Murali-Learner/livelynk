@@ -25,19 +25,25 @@ class ChatScreenState extends State<ChatScreen> {
     super.initState();
     homeChatProvider = Provider.of<HomeChatProvider>(context, listen: false);
     userChatProvider = Provider.of<UserChatProvider>(context, listen: false);
-    homeChatProvider.joinRoom(userChatProvider.contact!);
-    homeChatProvider.getChatHistory(
-      user: userChatProvider.contact!,
-      userChatProvider: userChatProvider,
-    );
+    Future.delayed(Duration.zero, () async {
+      await homeChatProvider.init(context: context);
+    });
   }
 
   void _scrollToBottom() {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
+      _scrollController.position.minScrollExtent,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
+  }
+
+  @override
+  void dispose() {
+    // homeChatProvider.removeSendMessageSocketListener(
+    //   openedChatUserId: userChatProvider.contact!.userId!,
+    // );
+    super.dispose();
   }
 
   @override
@@ -52,26 +58,34 @@ class ChatScreenState extends State<ChatScreen> {
         userChatProvider,
         _,
       ) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _scrollToBottom();
-        });
+        if ((userChatProvider.contact?.chatMessages ?? []).isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _scrollToBottom();
+          });
+        }
 
         return Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(8.0),
-                itemCount:
-                    (userChatProvider.contact!.chatMessages ?? []).length,
-                itemBuilder: (context, index) {
-                  final message =
-                      (userChatProvider.contact!.chatMessages ?? [])[index];
-                  return ChatBubble(
-                    message: message,
-                  );
-                },
-              ),
+              child: (userChatProvider.contact!.chatMessages ?? []).isEmpty
+                  ? const Center(
+                      child: Text('No messages yet'),
+                    )
+                  : ListView.builder(
+                      reverse: true,
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(8.0),
+                      itemCount:
+                          (userChatProvider.contact!.chatMessages ?? []).length,
+                      itemBuilder: (context, index) {
+                        final message =
+                            (userChatProvider.contact!.chatMessages ??
+                                [])[index];
+                        return ChatBubble(
+                          message: message,
+                        );
+                      },
+                    ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

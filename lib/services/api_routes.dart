@@ -1,5 +1,5 @@
 class APIRoutes {
-  static const baseUrl = 'https://d9fe-103-149-58-237.ngrok-free.app';
+  static const baseUrl = 'https://ae40-157-10-167-49.ngrok-free.app';
 
   //auth Routes
   static const login = '$baseUrl/auth/login';

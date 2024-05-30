@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livelynk/models/chat_message.dart';
 import 'package:livelynk/models/contact_model.dart';
 import 'package:livelynk/providers/user_chat_provider.dart';
 import 'package:livelynk/utils/extensions/context_extensions.dart';
@@ -15,6 +16,9 @@ class ChatContactTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ChatMessage? lastMessage =
+        (user.chatMessages ?? []).isNotEmpty ? user.chatMessages?.first : null;
+
     return ListTile(
       onTap: () {
         context.read<UserChatProvider>().setContact = user;
@@ -22,6 +26,7 @@ class ChatContactTile extends StatelessWidget {
       },
       tileColor: context.theme.cardColor,
       leading: CircleAvatar(
+        backgroundColor: Colors.green,
         child: Text(
           user.username[0].toUpperCase(),
           style: context.textTheme.titleMedium,
@@ -32,7 +37,7 @@ class ChatContactTile extends StatelessWidget {
         style: context.textTheme.titleMedium,
       ),
       subtitle: Text(
-        user.email!,
+        (lastMessage?.message) ?? '',
         style: context.textTheme.labelMedium,
       ),
     );

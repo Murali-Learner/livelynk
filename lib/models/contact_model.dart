@@ -33,9 +33,16 @@ class Contact {
       roomId: json['roomId'].toString(),
       username: json['userName'] ?? json['username'] ?? '',
       email: json['email'].toString(),
-      chatMessages: json['chatMessages'],
+      chatMessages: _getChatMessages(json['chatMessages']),
       contactId: json['contactId'],
     );
+  }
+
+  static List<ChatMessage>? _getChatMessages(List<dynamic>? messages) {
+    if (messages != null) {
+      return messages.map((message) => ChatMessage.fromJson(message)).toList();
+    }
+    return null;
   }
 
   // To JSON

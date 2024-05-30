@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:livelynk/services/api_routes.dart';
+import 'package:livelynk/services/hive_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomeSocket {
@@ -49,7 +50,8 @@ class HomeSocket {
     _socket?.on('open', (_) => onOpen?.call());
     _socket?.on('failed', (data) => onFailed?.call());
     _socket?.on("joinedRoom", (data) => onJoinedRoom?.call(data));
-    _socket?.on("receiveMessage", (data) => onReceivedMessage?.call(data));
+    // _socket?.on("received-${HiveService.currentUser?.userId ?? 0}",
+    //     (data) => onReceivedMessage?.call(data));
 
     _socket?.on("connect_timeout",
         (data) => {print("connect_timeout          ${data.toString()}")});
