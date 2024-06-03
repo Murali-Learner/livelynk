@@ -1,10 +1,9 @@
 import 'package:hive/hive.dart';
 import 'package:livelynk/models/chat_message.dart';
-import 'package:livelynk/models/contact_model.dart';
-part 'user_model.g.dart';
+part 'contact_model.g.dart';
 
-@HiveType(typeId: 0)
-class User {
+@HiveType(typeId: 1)
+class Contact {
   @HiveField(0)
   final int? userId;
   @HiveField(1)
@@ -14,36 +13,36 @@ class User {
   @HiveField(3)
   final String? roomId;
   @HiveField(4)
-  final Map<int, Contact>? unRequestedUsers;
+  final List<ChatMessage>? chatMessages;
   @HiveField(5)
-  final Map<int, Contact>? requestedUsers;
-  @HiveField(6)
-  final Map<int, Contact>? invitedUsers;
-  @HiveField(7)
-  final Map<int, Contact>? acceptedUsers;
-  @HiveField(8)
-  final Map<int, Contact>? originalUsers;
+  final String? contactId;
 
-  User({
+  Contact({
     required this.username,
     this.userId,
     this.roomId,
     this.email,
-    this.unRequestedUsers,
-    this.requestedUsers,
-    this.invitedUsers,
-    this.acceptedUsers,
-    this.originalUsers,
+    this.chatMessages,
+    this.contactId,
   });
 
   // From JSON
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory Contact.fromJson(Map<String, dynamic> json) {
+    return Contact(
       userId: json['userId'],
       roomId: json['roomId'].toString(),
       username: json['userName'] ?? json['username'] ?? '',
       email: json['email'].toString(),
+      chatMessages: _getChatMessages(json['chatMessages']),
+      contactId: json['contactId'],
     );
+  }
+
+  static List<ChatMessage>? _getChatMessages(List<dynamic>? messages) {
+    if (messages != null) {
+      return messages.map((message) => ChatMessage.fromJson(message)).toList();
+    }
+    return null;
   }
 
   // To JSON
@@ -57,20 +56,22 @@ class User {
   }
 
   // Copy with method
-  User copyWith({
+  Contact copyWith({
     int? userId,
     String? username,
     String? email,
     String? roomId,
     String? contactId,
-    Map<int, User>? contacts,
+    Map<int, Contact>? contacts,
     List<ChatMessage>? chatMessages,
   }) {
-    return User(
+    return Contact(
       userId: userId ?? this.userId,
       username: username ?? this.username,
       email: email ?? this.email,
       roomId: roomId ?? this.roomId,
+      chatMessages: chatMessages ?? this.chatMessages,
+      contactId: contactId ?? this.contactId,
     );
   }
 }
