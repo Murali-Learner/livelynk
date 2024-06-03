@@ -155,9 +155,9 @@ io
 file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/io-1.0.4/
 file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/io-1.0.4/lib/
 js
-2.19
-file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.6.7/
-file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.6.7/lib/
+3.1
+file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.7.1/
+file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.7.1/lib/
 json_annotation
 3.0
 file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.9.0/
@@ -274,6 +274,14 @@ shelf_web_socket
 2.17
 file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-1.0.4/
 file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-1.0.4/lib/
+socket_io_client
+3.0
+file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_client-3.0.0-beta.2/
+file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_client-3.0.0-beta.2/lib/
+socket_io_common
+3.0
+file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_common-3.0.0-beta.0/
+file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/socket_io_common-3.0.0-beta.0/lib/
 source_gen
 3.0
 file:///C:/Users/sai's%20laptop/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-1.5.0/

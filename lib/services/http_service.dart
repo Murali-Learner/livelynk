@@ -1,95 +1,81 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:livelynk/models/user_model.dart';
+import 'dart:io';
+import 'dart:isolate';
 
 class HttpService {
-  static const String baseUrl = 'http://192.168.24.159:3000';
+  // Private constructor
+  HttpService._init();
 
-  Future<http.Response> register(
-      String username, String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/register'),
-      headers: {'Content-Type': 'application/json'},
-      body: json
-          .encode({'username': username, 'email': email, 'password': password}),
-    );
+  static final HttpService _instance = HttpService._init();
 
-    return response;
+  factory HttpService() {
+    return _instance;
   }
 
-  Future<http.Response> login(String username, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'username': username, 'password': password}),
-    );
+  // SendPort to communicate with the isolate
+  static SendPort? _httpRequestHandlerSendPort;
 
-    return response;
-  }
+  // Isolate entry point
+  static void httpRequestHandler(SendPort sendPort) async {
+    final ReceivePort receivePort = ReceivePort();
+    sendPort.send(receivePort.sendPort);
 
-  Future<http.Response> addContact(
-      String currentUserId, String contactId) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/add_contact/$currentUserId'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({"contactUserId": contactId}),
-    );
+    await for (final message in receivePort) {
+      final SendPort replyPort = message[0];
+      final String method = message[1];
+      final String url = message[2];
+      final dynamic body = message[3];
 
-    return response;
-  }
+      HttpClient client = HttpClient();
+      HttpClientRequest request;
 
-  Future<http.Response> deleteContact(
-      String currentUserId, String contactUserId) async {
-    final url =
-        Uri.parse('$baseUrl/delete_contact/$currentUserId/$contactUserId');
+      try {
+        switch (method) {
+          case 'GET':
+            request = await client.getUrl(Uri.parse(url));
+            break;
+          case 'POST':
+            request = await client.postUrl(Uri.parse(url));
+            request.headers.set('Content-Type', 'application/json');
+            request.write(json.encode(body));
+            break;
+          case 'DELETE':
+            request = await client.deleteUrl(Uri.parse(url));
+            request.headers.set('Content-Type', 'application/json');
+            request.write(json.encode(body));
+            break;
+          default:
+            throw UnsupportedError('Unsupported HTTP method: $method');
+        }
 
-    final response = await http.delete(
-      url,
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    return response;
-  }
-
-  Future<List<User>> fetchTotalContacts(String userId) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/all_contacts/$userId'),
-    );
-
-    if (response.statusCode == 200) {
-      final contacts = json.decode(response.body)['contacts'];
-
-      return (contacts as List).map((data) => User.fromJson(data)).toList();
-    } else {
-      throw Exception('Failed to fetch users');
+        HttpClientResponse response = await request.close();
+        String responseBody = await response.transform(utf8.decoder).join();
+        replyPort.send({responseBody, response.statusCode});
+      } catch (e) {
+        replyPort.send({e.toString(), 500});
+      }
     }
   }
 
-  Future<List<User>> fetchMyUsers(String userId) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/user_contacts/$userId'),
-    );
-
-    if (response.statusCode == 200) {
-      final contacts = json.decode(response.body)['contacts'];
-
-      return (contacts as List).map((data) => User.fromJson(data)).toList();
-    } else {
-      throw Exception('Failed to fetch users');
+  // Initialize the isolate if not already done
+  static Future<void> _initIsolate() async {
+    if (_httpRequestHandlerSendPort == null) {
+      final ReceivePort receivePort = ReceivePort();
+      await Isolate.spawn(
+        httpRequestHandler,
+        receivePort.sendPort,
+      );
+      _httpRequestHandlerSendPort = await receivePort.first as SendPort;
     }
   }
 
-  Future<List<User>> fetchChatContacts(String userId) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/chat_users/$userId'),
-    );
-    if (response.statusCode == 200) {
-      final contacts = json.decode(response.body)['chatUsers'];
+  // Send HTTP request
+  static Future<Set> send(String method, String url, [dynamic body]) async {
+    await _initIsolate();
 
-      return (contacts as List).map((data) => User.fromJson(data)).toList();
-    } else {
-      throw Exception('Failed to fetch users');
-    }
+    final ReceivePort responsePort = ReceivePort();
+    _httpRequestHandlerSendPort!
+        .send([responsePort.sendPort, method, url, body]);
+    return await responsePort.first as Set;
   }
 }

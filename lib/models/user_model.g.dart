@@ -18,18 +18,21 @@ class UserAdapter extends TypeAdapter<User> {
     };
     return User(
       username: fields[1] as String,
-      userId: fields[0] as String?,
-      roomId: fields[5] as String?,
+      userId: fields[0] as int?,
+      roomId: fields[3] as String?,
       email: fields[2] as String?,
-      contacts: (fields[3] as List).cast<User>(),
-      rooms: (fields[4] as List).cast<Room>(),
+      unRequestedUsers: (fields[4] as Map?)?.cast<int, Contact>(),
+      requestedUsers: (fields[5] as Map?)?.cast<int, Contact>(),
+      invitedUsers: (fields[6] as Map?)?.cast<int, Contact>(),
+      acceptedUsers: (fields[7] as Map?)?.cast<int, Contact>(),
+      originalUsers: (fields[8] as Map?)?.cast<int, Contact>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -37,11 +40,17 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(2)
       ..write(obj.email)
       ..writeByte(3)
-      ..write(obj.contacts)
+      ..write(obj.roomId)
       ..writeByte(4)
-      ..write(obj.rooms)
+      ..write(obj.unRequestedUsers)
       ..writeByte(5)
-      ..write(obj.roomId);
+      ..write(obj.requestedUsers)
+      ..writeByte(6)
+      ..write(obj.invitedUsers)
+      ..writeByte(7)
+      ..write(obj.acceptedUsers)
+      ..writeByte(8)
+      ..write(obj.originalUsers);
   }
 
   @override
