@@ -8,7 +8,7 @@ class AuthApiService {
       'POST',
       APIRoutes.register,
       {
-        'username': username,
+        'userName': username,
         'email': email,
         'password': password,
       },
