@@ -1,5 +1,9 @@
 # LiveLynk
 
+
+https://github.com/Murali-Learner/livelynk/assets/59490902/0bef3144-4869-4c68-9d04-b67eb3d6128d
+
+
 LiveLynk is a cross-platform application that allows users to send and accept invites, facilitating easy and seamless connections. Built with Flutter for the front end, it uses Provider for state management. The backend is powered by Node.js, Express.js, and MongoDB, incorporating sockets and WebRTC for real-time communication. A video-calling feature is currently in progress.
 
 ## Features
